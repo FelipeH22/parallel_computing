@@ -50,24 +50,31 @@ void printMatrix(double** matrix, int N) {
 }
 
 int main() {
-    int N=2;
+    int N=1024;
 
     double** A = allocateMatrix(N);
     double** B = allocateMatrix(N);
     double** result = allocateMatrix(N);
     initializeMatrices(A, B, N);
 
-    printf("Matrix A:\n");
+    /*printf("Matrix A:\n");
     printMatrix(A, N);
     printf("Matrix B:\n");
-    printMatrix(B, N);
+    printMatrix(B, N);*/
+
+    clock_t begin = clock();
     multiplyMatrices(A, B, result, N);
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
     printf("Resultant matrix:\n");
     printMatrix(result, N);
 
     freeMatrix(A, N);
     freeMatrix(B, N);
     freeMatrix(result, N);
+
+    printf("Time: %.5lf\t", time_spent);
 
     return 0;
 }

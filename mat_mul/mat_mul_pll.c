@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include <omp.h> // Include OpenMP header
+#include <omp.h>
+
+#define THREADS 16
 
 double** allocateMatrix(int N) {
     double** matrix = (double**)malloc(N * sizeof(double*));
@@ -31,6 +33,7 @@ void initializeMatrices(double** A, double** B, int N) {
 }
 
 void multiplyMatrices(double** A, double** B, double** result, int N) {
+    omp_set_num_threads(THREADS);
     #pragma omp parallel for
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -52,17 +55,17 @@ void printMatrix(double** matrix, int N) {
 }
 
 int main() {
-    int N = 2;
+    int N = 1024;
 
     double** A = allocateMatrix(N);
     double** B = allocateMatrix(N);
     double** result = allocateMatrix(N);
     initializeMatrices(A, B, N);
 
-    printf("Matrix A:\n");
+    /*printf("Matrix A:\n");
     printMatrix(A, N);
     printf("Matrix B:\n");
-    printMatrix(B, N);
+    printMatrix(B, N);*/
 
     double start_time = omp_get_wtime();
     multiplyMatrices(A, B, result, N);
